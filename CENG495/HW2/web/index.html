@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="shortcut icon" type="image/png" href="https://www.mongodb.com/assets./images/global/favicon.ico"/>
+<link rel="stylesheet" type="text/css" href="src/css/home-page.css">
+<script src="https://unpkg.com/realm-web@1.2.0/dist/bundle.iife.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style>
+    .add-book-form {
+        width: 15%;
+        border-width: 2px;
+        border-color: black;
+        border-style: solid;
+        border-radius: 20px;
+        padding: 1%;
+        margin: 2%;
+    }
+    .add-book-form-buttons-div {
+        display:flex;
+    }
+    .add-book-form-buttons-div > button {
+        flex: 1;
+    }
+
+    .user-name-login-div {
+        width: 10%;
+        margin: 2%;
+        display: flex;
+        flex-direction: column;
+    }
+    .upper-tab {
+        width: 100%;
+        display: flex;
+        align-items: stretch;
+    }
+    .upper-tab > button {
+        flex: 1;
+    }
+</style>
+
+
+<head>
+    <title>Home Page</title>
+    <div class="upper-tab">
+        <button type="button" class="btn btn-primary" onclick="navigate_home_page()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 14 14">
+                <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5z"></path>
+            </svg>
+        </button>
+        <button type="button" class="btn btn-success" onclick="navigate_user_page()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 14 14">
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+            </svg>
+        </button>
+        <button type="button" class="btn btn-primary" style="background-color: red" onclick="navigate_books_page()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="16" fill="currentColor" class="bi bi-book-fill" viewBox="0 0 14 14">
+                <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+            </svg>
+        </button>
+    </div>
+</head>
+<body class="body">
+
+    <h2 id="title" style="margin-left:2%">Home Page</h2>
+    <!-- Login anonymously -->
+    <div class="user-name-login-div">
+        <label for="username-input" class="formbuilder-text-label">Username</label>
+        <input type="text" class="form-control" name="username-input" id="username-input" value="">
+        <button type="button" class="login-button btn-success btn" style="margin-top: 4%" onclick="login()">Login</button>
+        <div>
+            <button type="button" class="btn-warning btn" name="remove-user-button" id="remove-user-button" onclick="remove_user()">Remove User</button>
+        </div>
+    </div>
+
+    <div class="formbuilder-button form-group field-add-book-button" style="margin-left: 2%">
+        <button type="button" class="btn-info btn" name="add-book-button" id="add-book-button" onclick="open_add_book_form()">Add Book</button>
+    </div>
+    <div id="add-book-form" class="add-book-form" hidden >
+        <div class="formbuilder-text form-group field-text-1652824274219">
+            <label for="text-1652824274219" class="formbuilder-text-label">Name</label>
+            <input type="text" placeholder="Gençler İçin Nutuk" class="form-control" name="book-name" required id="text-1652824274219">
+        </div>
+        <div class="formbuilder-text form-group field-text-1652824318914">
+            <label for="text-1652824318914" class="formbuilder-text-label">Authors<span class="tooltip-element" tooltip="Seperate authors with a comma and a space (, )">?</span></label>
+            <input type="text" placeholder="Gazi, Mustafa Kemal Atatürk" class="form-control" name="book-authors" id="text-1652824318914" title="Seperate authors with a comma and a space (, )">
+        </div>
+        <div class="formbuilder-text form-group field-text-1652824362449">
+            <label for="text-1652824362449" class="formbuilder-text-label">Translator</label>
+            <input type="text" class="form-control" name="book-translator" id="text-1652824362449">
+        </div>
+        <div class="formbuilder-text form-group field-text-1652824392414">
+            <label for="text-1652824392414" class="formbuilder-text-label">Editor</label>
+            <input type="text" placeholder="Ali Berktay" class="form-control" name="book-editor" access="false" id="text-1652824392414">
+        </div>
+        <div class="formbuilder-text form-group field-text-1652824435550">
+            <label for="text-1652824435550" class="formbuilder-text-label">Cover URL<span class="tooltip-element" tooltip="Insert URL of the cover."></span></label>
+            <input type="text" placeholder="https://img.iskultur.com.tr/2010/02/nutuk-8.png" class="form-control" name="book-coverurl" access="false" id="text-1652824435550" title="Insert URL of the cover.">
+        </div>
+        <div class="formbuilder-checkbox-group form-group field-checkbox-group-1652824489861">
+            <label for="checkbox-group-1652824489861" class="formbuilder-checkbox-group-label">Is Fictional<span class="tooltip-element" tooltip="Colorful option means true.">?</span></label>
+            <div class="checkbox-group">
+                <div class="formbuilder"-checkbox">
+                    <label for="checkbox-group-1652824489861-0" class="kc-toggle">
+                        <input type="checkbox" name="book-isfictional" id="checkbox-group-1652824489861-0" ><span></span></label>
+                </div>
+            </div>
+        <div class="formbuilder-text form-group field-text-1652824581350">
+            <label for="text-1652824581350" class="formbuilder-text-label">Publisher</label>
+            <input type="text" placeholder="İş Kültür Yayınları" class="form-control" name="book-publisher" access="false" id="text-1652824581350">
+        </div>
+        <div class="formbuilder-select form-group field-select-1652824611541">
+            <label for="select-1652824611541" class="formbuilder-select-label">Genre<span class="tooltip-element" tooltip="Only fictional books have genres."></span></label>
+            <select class="form-control" name="book-genre" id="select-1652824611541">
+                <option value="no-fictional" id="select-1652824611541-0">Not fictional</option>
+                <option value="horror"  id="select-1652824611541-1">Horror</option>
+                <option value="fantasy"  id="select-1652824611541-2">Fantasy</option>
+                <option value="crime" id="select-1652824611541-3">Crime</option>
+                <option value="romance" id="select-1652824611541-4">Romance</option>
+                <option value="sci-fi" id="select-1652824611541-5">Sci-Fi</option>
+                <option value="drama" id="select-1652824611541-6">Drama</option>
+            </select>
+        </div>
+        <div class="formbuilder-number form-group field-number-1652824805570">
+            <label for="number-1652824805570" class="formbuilder-number-label">Publish Year</label>
+            <input type="number" class="form-control" name="book-publish-year" max="2022" step="1" id="number-1652824805570">
+        </div>
+        <div class="add-book-form-buttons-div">
+            <button type="button" class="close-form-button btn-danger btn" name="button-1652828066160" id="button-1652828066160" onclick="close_add_book_form()">Close</button>
+            <button type="submit" class="insert-button btn-success btn" name="button-1652828037173" id="button-1652828037173" onclick="add_book()">Insert</button>
+            <button type="reset" class="insert-button btn-default btn" name="button-1652828037173" id="reset-button" onclick="reset_add_book_form()">Reset</button>
+        </div>
+    </div>
+    <script src="./data.js"></script>
+
+    <script type="text/javascript">
+        get_username().then((username) => {
+            if(username !== ''){
+                $('#title').empty().append("Hello, ",username);
+            }
+        });
+
+    </script>
+
+</body>
+</html>

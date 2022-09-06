@@ -1,0 +1,93 @@
+
+FUNC RUN_VENDING_MACHINE():
+
+    SET OPT to NULL
+
+    INIT_BUTTON_PRESS_LISTENER()
+    INIT_OPT_IS_MADE_LISTENER()
+
+    FUNC ON_BUTTON_PRESS(e:event):
+
+        IF NOT DOES_PRODUCT_EXIST(e.PRODUCT_ID) THEN
+            SHOW_ERROR(PRODUCT_RUN_OUT)
+
+        SWITCH(e.buttonType)
+
+            CASE SOFT_DRINK:
+                SET OPT to SOFT_DRINK
+                GET IS_MILK_DESIRED
+                GET IS_SUGAR_DESIRED
+                IF IS_MILK_DESIRED THEN OPT.ADD_MILK()
+                IF IS SUGAR_DESIRED THEN OPT.ADD_SUGAR()
+                OPT.ADD_SERVE_ITEM(CUP)
+                OPT.ADD_SERVE_ITEM(SPOON)
+            ENDCASE
+                
+            CASE BEVERAGE:
+                SET OPT to BEVERAGE
+                GET IS_MILK_DESIRED
+                GET IS_SUGAR_DESIRED
+                IF IS_MILK_DESIRED THEN BEVERAGE.ADD_MILK
+                IF IS SUGAR_DESIRED THEN BEVERAGE.ADD_SUGAR
+            ENDCASE
+            
+            CASE SOLID_FOOD:
+                SET OPT to SOLID_FOOD
+            ENDCASE
+
+        ENDSWITCH
+
+        SET OPT.PRODUCT_ID to e.PRODUCT_ID
+
+    ENDFUNC
+
+    FUNC ON_OPT_IS_MADE():
+        PRINT OPT.PRICE
+        GET PAYMENT_METHOD
+        
+        SWITCH(PAYMENT_METHOD):
+            CASE COIN:
+                INPUT MONEY
+                IF MONEY = OPT.PRICE THEN CONTINUE
+                ELSE IF MONEY > OPT.PRICE THEN CHANGE(MONEY-OPT.PRICE)
+                ELSE SHOW_ERROR(NOT_SUFFICIENT_AMOUNT)
+                ENDIF
+            ENDCASE
+
+            
+            CASE BANKNOTE:
+                INPUT MONEY
+                IF MONEY = OPT.PRICE THEN CONTINUE
+                ELSE IF MONEY > OPT.PRICE THEN CHANGE(MONEY-OPT.PRICE)
+                ELSE SHOW_ERROR(NOT_SUFFICIENT_AMOUNT)
+                ENDIF
+            ENDCASE
+
+
+            CASE CREDIT_CARD:
+                INPUT CARD
+                INPUT PIN
+                SEND REQUEST_TO_BANK(OPT.PRICE,ENCRYPTED_CARD_INFO,PIN)
+
+                SWITCH(resp:RESPONSE_FROM_THE_BANK):
+                    CASE resp.SUCCESS:
+                        CONTINUE
+                    CASE resp.SHOW_ERROR.NOT_RESPONDING:
+                        SHOW_ERROR(BANK_IS_NOT_RESPONDING)
+                    CASE resp.SHOW_ERROR.AUTH:
+                        SHOW_ERROR(INCORRECT_PIN)
+                    CASE resp.SHOW_ERROR.INSUFFICIENT_AMOUNT:
+                        SHOW_ERROR(INSUFFICIENT_AMOUNT)
+            ENDCASE
+        ENDSWITCH
+
+        IF COMPLETE_PROCUT_SERVICE(OPT) THEN 
+            IF IS_PRODUCT_RUNNING(OPT) THEN 
+                IF THIS.CAN_ORDER_A_PRODUCT THEN
+                    ORDER_PRODUCT(OPT.PRODUCT_ID)
+        ENDIF
+        
+    ENDFUNC
+    
+    
+
